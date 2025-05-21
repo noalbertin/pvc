@@ -84,16 +84,30 @@ const Graph: React.FC<GraphProps> = ({ nodes, links, shortestPath, shortestPathL
     merge.append('feMergeNode');
     merge.append('feMergeNode').attr('in', 'SourceGraphic');
 
+    // Updated arrow marker definition
     defs.append('marker')
       .attr('id', 'arrow')
-      .attr('viewBox', '0 0 10 10')
-      .attr('refX', 9)
-      .attr('refY', 3)
-      .attr('markerWidth', 6)
-      .attr('markerHeight', 6)
+      .attr('viewBox', '0 -5 10 10')
+      .attr('refX', 26) // Increased refX to position arrow at the target node's edge
+      .attr('refY', 0)
+      .attr('markerWidth', 8)
+      .attr('markerHeight', 8)
       .attr('orient', 'auto')
       .append('path')
-        .attr('d', 'M0,0 L0,6 L9,3 z')
+        .attr('d', 'M0,-5L10,0L0,5')
+        .attr('fill', 'red');
+
+    // Legend arrow marker (same definition but different ID)
+    defs.append('marker')
+      .attr('id', 'legend-arrow')
+      .attr('viewBox', '0 -5 10 10')
+      .attr('refX', 10)
+      .attr('refY', 0)
+      .attr('markerWidth', 8)
+      .attr('markerHeight', 8)
+      .attr('orient', 'auto')
+      .append('path')
+        .attr('d', 'M0,-5L10,0L0,5')
         .attr('fill', 'red');
 
     const simulation = d3.forceSimulation<Node>(nodes)
@@ -116,6 +130,19 @@ const Graph: React.FC<GraphProps> = ({ nodes, links, shortestPath, shortestPathL
       return false;
     };
 
+    // Direction-aware shortest path check
+    const isDirectedShortestPath = (source: string | Node, target: string | Node): boolean => {
+      const src = getId(source);
+      const tgt = getId(target);
+      
+      for (let i = 0; i < shortestPath.length - 1; i++) {
+        if (shortestPath[i] === src && shortestPath[i+1] === tgt) {
+          return true;
+        }
+      }
+      return false;
+    };
+
     const link = svg.append('g')
       .attr('class', 'links')
       .selectAll('line')
@@ -125,17 +152,7 @@ const Graph: React.FC<GraphProps> = ({ nodes, links, shortestPath, shortestPathL
       .attr('stroke', d => isInShortestPath(d.source, d.target) ? 'red' : '#ccc')
       .attr('stroke-width', d => isInShortestPath(d.source, d.target) ? 2 : 1)
       .attr('stroke-dasharray', d => isInShortestPath(d.source, d.target) ? '5,5' : '0')
-      .attr('marker-end', d => {
-        const sourceId = getId(d.source);
-        const targetId = getId(d.target);
-
-        for (let i = 0; i < shortestPath.length - 1; i++) {
-          if (shortestPath[i] === sourceId && shortestPath[i + 1] === targetId) {
-            return 'url(#arrow)';
-          }
-        }
-        return 'none';
-      });
+      .attr('marker-end', d => isDirectedShortestPath(d.source, d.target) ? 'url(#arrow)' : 'none');
 
     link.append('title').text(d => `Distance: ${d.distance}`);
 
@@ -224,11 +241,12 @@ const Graph: React.FC<GraphProps> = ({ nodes, links, shortestPath, shortestPathL
     legend.append('line').attr('x1', 0).attr('y1', 50).attr('x2', 20).attr('y2', 50).attr('stroke', strokeColor).attr('stroke-width', 1);
     legend.append('text').attr('x', 25).attr('y', 54).text(t('legend.possibleLink')).attr('font-size', '12px').attr('fill', textColor);
 
+    // Updated legend line with marker-end
     legend.append('line')
       .attr('x1', 0).attr('y1', 70).attr('x2', 20).attr('y2', 70)
       .attr('stroke', 'red').attr('stroke-width', 2)
       .attr('stroke-dasharray', '5,5')
-      .attr('marker-end', 'url(#arrow)');
+      .attr('marker-end', 'url(#legend-arrow)');
 
     legend.append('text').attr('x', 25).attr('y', 74).text(t('legend.optimalPath')).attr('font-size', '12px').attr('fill', textColor);
 
