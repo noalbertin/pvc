@@ -90,47 +90,53 @@ const getGraphData = () => {
   
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-900 dark:to-slate-800">
-      <div className="max-w-6xl mx-auto space-y-6">
+   <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <Header onRefresh={handleRefresh} isRefreshing={isRefreshing} />
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-2">
-          <div className="space-y-6">
-            <CityForm onSubmit={handleCitiesSubmit} cities={cities} />
+        
+        <main className="py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="space-y-8">
+              <CityForm onSubmit={handleCitiesSubmit} cities={cities} />
 
-            {cities.length > 0 && (
-              <DistanceMatrix
-                cities={cities}
-                distances={distances}
-                onSubmit={handleDistancesSubmit}
-              />
+              {cities.length > 0 && (
+                <DistanceMatrix
+                  cities={cities}
+                  distances={distances}
+                  onSubmit={handleDistancesSubmit}
+                />
+              )}
+            </div>
+
+            {solution && (
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+                <div className="p-6">
+                  <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-6">
+                    Solution Optimale
+                  </h2>
+
+                  <div className="mb-6">
+                    <Result solution={solution} />
+                  </div>
+
+                  <div className="relative h-[500px] rounded-lg bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700">
+                    <div className="absolute inset-0 p-4">
+                      <Graph
+                        nodes={nodes}
+                        links={links}
+                        shortestPath={solution.path}
+                        shortestPathLinks={shortestPathLinks}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
+        </main>
 
-          {solution && (
-            <div className="bg-white dark:bg-slate-800 shadow-xl rounded-xl p-6">
-              <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">
-                Visualisation du Parcours
-              </h2>
-
-              {/* Section Résultats */}
-              <div className="mb-8">
-                <Result solution={solution} />
-              </div>
-
-              {/* Section Graphique */}
-              <div className="h-96 border-2 border-gray-100 dark:border-slate-700 rounded-lg">
-                <Graph
-                  nodes={nodes}
-                  links={links}
-                  shortestPath={solution.path}
-                  shortestPathLinks={shortestPathLinks} // Ajoutez cette prop
-                />
-              </div>
-            </div>
-          )}
-        </div>
         <About />
-        <Footer/>
+        <Footer />
       </div>
     </div>
 

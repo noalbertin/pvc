@@ -25,7 +25,7 @@ interface GraphProps {
   shortestPathLinks: Link[]; // Ajoutez cette prop
 }
 
-const Graph: React.FC<GraphProps> = ({ nodes, links, shortestPath, shortestPathLinks }) => {
+const Graph: React.FC<GraphProps> = ({ nodes, links, shortestPath }) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
@@ -61,6 +61,7 @@ const Graph: React.FC<GraphProps> = ({ nodes, links, shortestPath, shortestPathL
       .attr('height', height)
       .attr('viewBox', `0 0 ${width} ${height}`)
       .attr('preserveAspectRatio', 'xMidYMid meet');
+
 
     // === Définition d'un filtre d'ombre et des marqueurs de flèche ===
     const defs = svg.append('defs');
