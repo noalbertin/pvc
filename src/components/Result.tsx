@@ -38,7 +38,7 @@ export default function Result({ solution }: ResultProps) {
 
         <div className="bg-green-600 rounded-lg px-4 py-3 min-w-[140px]">
           <h3 className="text-xs font-medium text-white">{t('result.total')}</h3>
-          <p className="text-lg font-semibold text-blue-800">
+          <p className="text-lg font-semibold text-blue-300">
             {solution.distance} <span className="text-sm font-normal text-white">{t('result.unite')}</span>
           </p>
         </div>

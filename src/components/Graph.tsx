@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState, useContext } from 'react';
 import * as d3 from 'd3';
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next';
 import { ThemeContext } from '@/context/ThemeContext';
 
 interface Node {
@@ -15,8 +15,8 @@ interface Node {
 }
 
 interface Link {
-  source: string;
-  target: string;
+  source: string | Node;
+  target: string | Node;
   distance: number;
 }
 
@@ -24,18 +24,18 @@ interface GraphProps {
   nodes: Node[];
   links: Link[];
   shortestPath: string[];
-  shortestPathLinks: Link[]; // Ajoutez cette prop
+  shortestPathLinks: Link[]; 
 }
 
-const Graph: React.FC<GraphProps> = ({ nodes, links, shortestPath }) => {
+const Graph: React.FC<GraphProps> = ({ nodes, links, shortestPath, shortestPathLinks }) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
-  console.log('Graph props:', { nodes, links, shortestPath });
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const { theme } = useContext(ThemeContext);
 
-  // Fonction pour mettre à jour les dimensions
+  const getId = (d: string | Node): string => typeof d === 'object' ? d.id : d;
+
   const updateDimensions = () => {
     if (containerRef.current) {
       const { width } = containerRef.current.getBoundingClientRect();
@@ -46,7 +46,6 @@ const Graph: React.FC<GraphProps> = ({ nodes, links, shortestPath }) => {
     }
   };
 
-  // Observer les changements de dimension
   useEffect(() => {
     updateDimensions();
     window.addEventListener('resize', updateDimensions);
@@ -66,76 +65,80 @@ const Graph: React.FC<GraphProps> = ({ nodes, links, shortestPath }) => {
       .attr('viewBox', `0 0 ${width} ${height}`)
       .attr('preserveAspectRatio', 'xMidYMid meet');
 
-
-    // === Définition d'un filtre d'ombre et des marqueurs de flèche ===
     const defs = svg.append('defs');
     
-    defs.html(`
-      <filter id="drop-shadow" height="130%">
-        <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
-        <feOffset dx="2" dy="2" result="offsetblur"/>
-        <feMerge>
-          <feMergeNode/>
-          <feMergeNode in="SourceGraphic"/>
-        </feMerge>
-      </filter>
-    `);
-    
-    // Définir le marqueur de flèche séparément 
+    const dropShadow = defs.append('filter')
+      .attr('id', 'drop-shadow')
+      .attr('height', '130%');
+
+    dropShadow.append('feGaussianBlur')
+      .attr('in', 'SourceAlpha')
+      .attr('stdDeviation', 3);
+
+    dropShadow.append('feOffset')
+      .attr('dx', 2)
+      .attr('dy', 2)
+      .attr('result', 'offsetblur');
+
+    const merge = dropShadow.append('feMerge');
+    merge.append('feMergeNode');
+    merge.append('feMergeNode').attr('in', 'SourceGraphic');
+
     defs.append('marker')
       .attr('id', 'arrow')
       .attr('viewBox', '0 0 10 10')
-      .attr('refX', '22') 
-      .attr('refY', '5')
-      .attr('markerWidth', '8')
-      .attr('markerHeight', '8')
-      .attr('markerUnits', 'strokeWidth')  
-      .attr('orient', 'auto-start-reverse')
+      .attr('refX', 9)
+      .attr('refY', 3)
+      .attr('markerWidth', 6)
+      .attr('markerHeight', 6)
+      .attr('orient', 'auto')
       .append('path')
-        .attr('d', 'M 0 0 L 10 5 L 0 10 z')
+        .attr('d', 'M0,0 L0,6 L9,3 z')
         .attr('fill', 'red');
 
-    // === Force simulation ===
-    const simulation = d3.forceSimulation(nodes)
-      .force('link', d3.forceLink(links).id((d: any) => d.id).distance(120))
+    const simulation = d3.forceSimulation<Node>(nodes)
+      .force('link', d3.forceLink<Node, Link>(links).id(d => d.id).distance(120))
       .force('charge', d3.forceManyBody().strength(-500))
       .force('center', d3.forceCenter(width / 2, height / 2))
       .force('x', d3.forceX(width / 2).strength(0.1))
       .force('y', d3.forceY(height / 2).strength(0.1));
 
-    const isInShortestPath = (source: any, target: any) => {
-      const src = typeof source === 'object' ? source.id : source;
-      const tgt = typeof target === 'object' ? target.id : target;
-
+    const isInShortestPath = (source: string | Node, target: string | Node): boolean => {
+      const src = getId(source);
+      const tgt = getId(target);
+      
       for (let i = 0; i < shortestPath.length - 1; i++) {
-        if (
-          (shortestPath[i] === src && shortestPath[i + 1] === tgt)
-        ) {
+        if ((shortestPath[i] === src && shortestPath[i+1] === tgt) ||
+            (shortestPath[i] === tgt && shortestPath[i+1] === src)) {
           return true;
         }
       }
       return false;
     };
 
-    // === Liens ===
     const link = svg.append('g')
       .attr('class', 'links')
       .selectAll('line')
       .data(links)
       .enter()
       .append('line')
-      .attr('stroke', d => {
-        const inShortestPath = isInShortestPath(d.source, d.target);
-        return inShortestPath ? 'red' : '#ccc';
-      })
+      .attr('stroke', d => isInShortestPath(d.source, d.target) ? 'red' : '#ccc')
       .attr('stroke-width', d => isInShortestPath(d.source, d.target) ? 2 : 1)
       .attr('stroke-dasharray', d => isInShortestPath(d.source, d.target) ? '5,5' : '0')
-      .attr('marker-end', d => isInShortestPath(d.source, d.target) ? 'url(#arrow)' : null)
-      .attr('fill', 'none');
+      .attr('marker-end', d => {
+        const sourceId = getId(d.source);
+        const targetId = getId(d.target);
+
+        for (let i = 0; i < shortestPath.length - 1; i++) {
+          if (shortestPath[i] === sourceId && shortestPath[i + 1] === targetId) {
+            return 'url(#arrow)';
+          }
+        }
+        return 'none';
+      });
 
     link.append('title').text(d => `Distance: ${d.distance}`);
 
-    // === Étiquettes de distance ===
     svg.selectAll('.distance-label-bg')
       .data(links)
       .enter()
@@ -158,8 +161,6 @@ const Graph: React.FC<GraphProps> = ({ nodes, links, shortestPath }) => {
       .attr('fill', '#333')
       .attr('text-anchor', 'middle');
 
-
-    // === Nœuds ===
     const nodeGroups = svg.append('g')
       .attr('class', 'nodes')
       .selectAll('g')
@@ -181,7 +182,6 @@ const Graph: React.FC<GraphProps> = ({ nodes, links, shortestPath }) => {
           d.fx = null;
           d.fy = null;
         }));
-
     
     const startNodeId = shortestPath[0];
     const endNodeId = shortestPath[shortestPath.length - 1];
@@ -215,20 +215,15 @@ const Graph: React.FC<GraphProps> = ({ nodes, links, shortestPath }) => {
     const textColor = theme === 'dark' ? '#eee' : '#333';
     const strokeColor = theme === 'dark' ? '#888' : '#ccc';
 
-
-    // Départ
     legend.append('circle').attr('cx', 0).attr('cy', 10).attr('r', 6).attr('fill', '#2196F3');
     legend.append('text').attr('x', 12).attr('y', 15).text(t('legend.depart')).attr('font-size', '12px').attr('fill', textColor);
 
-    // Arrivée
     legend.append('circle').attr('cx', 0).attr('cy', 30).attr('r', 6).attr('fill', '#F44336');
     legend.append('text').attr('x', 12).attr('y', 35).text(t('legend.arrival')).attr('font-size', '12px').attr('fill', textColor);
 
-    // Lien possible
     legend.append('line').attr('x1', 0).attr('y1', 50).attr('x2', 20).attr('y2', 50).attr('stroke', strokeColor).attr('stroke-width', 1);
     legend.append('text').attr('x', 25).attr('y', 54).text(t('legend.possibleLink')).attr('font-size', '12px').attr('fill', textColor);
 
-    // Chemin optimal
     legend.append('line')
       .attr('x1', 0).attr('y1', 70).attr('x2', 20).attr('y2', 70)
       .attr('stroke', 'red').attr('stroke-width', 2)
@@ -236,9 +231,24 @@ const Graph: React.FC<GraphProps> = ({ nodes, links, shortestPath }) => {
       .attr('marker-end', 'url(#arrow)');
 
     legend.append('text').attr('x', 25).attr('y', 74).text(t('legend.optimalPath')).attr('font-size', '12px').attr('fill', textColor);
-    // === Animation ===
+
+    const getX = (d: string | Node): number => {
+      if (typeof d === 'string') {
+        const node = nodes.find(n => n.id === d);
+        return node?.x ?? 0;
+      }
+      return d.x ?? 0;
+    };
+
+    const getY = (d: string | Node): number => {
+      if (typeof d === 'string') {
+        const node = nodes.find(n => n.id === d);
+        return node?.y ?? 0;
+      }
+      return d.y ?? 0;
+    };
+
     simulation.on('tick', () => {
-      // Limiter les positions des nœuds pour qu'ils restent dans les limites du SVG
       nodes.forEach(node => {
         node.x = Math.max(40, Math.min(width - 40, node.x || 0));
         node.y = Math.max(40, Math.min(height - 40, node.y || 0));
@@ -261,27 +271,9 @@ const Graph: React.FC<GraphProps> = ({ nodes, links, shortestPath }) => {
       nodeGroups.attr('transform', d => `translate(${d.x},${d.y})`);
     });
 
-    // === Fonctions utilitaires ===
-    function getX(d: any): number {
-      if (typeof d === 'string') {
-        const node = nodes.find(n => n.id === d);
-        return node?.x ?? 0;
-      }
-      return d.x ?? 0;
-    }
-
-    function getY(d: any): number {
-      if (typeof d === 'string') {
-        const node = nodes.find(n => n.id === d);
-        return node?.y ?? 0;
-      }
-      return d.y ?? 0;
-    }
-
-    
-
-
-
+    return () => {
+      simulation.stop();
+    };
   }, [nodes, links, shortestPath, dimensions, t, theme]);
 
   return (

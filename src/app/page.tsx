@@ -52,7 +52,6 @@ const getGraphData = () => {
     }
   }
 
-
   // Crée les liens du chemin optimal
   const shortestPathLinks = [];
   for (let i = 0; i < solution.path.length - 1; i++) {
@@ -123,7 +122,7 @@ const getGraphData = () => {
                         nodes={nodes}
                         links={links}
                         shortestPath={solution.path}
-                        shortestPathLinks={shortestPathLinks}
+                        shortestPathLinks={shortestPathLinks} 
                       />
                     </div>
                   </div>
