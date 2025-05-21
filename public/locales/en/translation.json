@@ -1,0 +1,18 @@
+{
+    "about": {
+      "name": "Nirindrainy Sylvano Albertin",
+      "title": "Full-Stack Developer",
+      "description": "Passionate about building elegant and high-performance web experiences.",
+      "portfolio": "View Portfolio",
+      "close": "Close",
+      "task_processing": "Processing task {{name}} (value: {{value}}, duration: {{duration}}h)"
+      
+    },
+    "droit": " All rights reserved."
+    
+
+    
+
+}
+    
+  
