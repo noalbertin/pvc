@@ -27,7 +27,7 @@ interface GraphProps {
   shortestPathLinks: Link[]; 
 }
 
-const Graph: React.FC<GraphProps> = ({ nodes, links, shortestPath, shortestPathLinks }) => {
+const Graph: React.FC<GraphProps> = ({ nodes, links, shortestPath}) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
