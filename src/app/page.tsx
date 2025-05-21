@@ -71,7 +71,7 @@ const getGraphData = () => {
   };
 };
 
-  const { nodes, links, shortestPathLinks } = getGraphData(); 
+  const { nodes, links } = getGraphData(); 
 
 
  const handleRefresh = () => {
