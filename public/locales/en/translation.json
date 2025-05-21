@@ -8,7 +8,37 @@
       "task_processing": "Processing task {{name}} (value: {{value}}, duration: {{duration}}h)"
       
     },
-    "droit": " All rights reserved."
+    "droit": " All rights reserved.",
+    "Title":"Optimal Solution",
+    "Header": {
+      "title":"Traveling Salesman Problem",
+      "soustitle":"Route optimization between cities"
+    },
+    "refresh":"Refresh",
+    "city": {
+      "title":"City Management",
+      "bouton":"Add",
+      "ville":"Selected cities",
+      "valide":"Validate cities",
+      "name":"City name"
+    },
+    "distanceMatrix": {
+      "title":"Distance Matrix",
+      "calcul":"Calculate the optimal route"
+    },
+    "result": {
+      "title":"Optimal route",
+      "total":"Total distance",
+      "unite":"units"
+    },
+    "ville": "City",
+    "legend": {
+      "depart": "Start",
+      "arrival": "End",
+      "possibleLink": "Possible link",
+      "optimalPath": "Optimal path"
+    }
+
     
 
     

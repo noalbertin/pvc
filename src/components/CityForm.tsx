@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next'
 
 interface CityFormProps {
   onSubmit: (cities: string[]) => void;
@@ -7,6 +8,7 @@ interface CityFormProps {
 
 export default function CityForm({ onSubmit, cities }: CityFormProps) {
   const [cityInput, setCityInput] = useState('');
+  const { t } = useTranslation()
 
   const handleAddCity = () => {
     if (cityInput.trim() && !cities.includes(cityInput.trim())) {
@@ -34,7 +36,7 @@ export default function CityForm({ onSubmit, cities }: CityFormProps) {
    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
       <div className="p-6">
         <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4">
-          Gestion des Villes
+          {t('city.title')}
         </h2>
         
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -43,7 +45,7 @@ export default function CityForm({ onSubmit, cities }: CityFormProps) {
               type="text"
               value={cityInput}
               onChange={(e) => setCityInput(e.target.value)}
-              placeholder="Nom de la ville"
+              placeholder={t('city.name')}
               className="flex-1 px-4 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
             />
             <button
@@ -51,14 +53,14 @@ export default function CityForm({ onSubmit, cities }: CityFormProps) {
               onClick={handleAddCity}
               className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
             >
-              Ajouter
+               {t('city.bouton')}
             </button>
           </div>
 
           {cities.length > 0 && (
             <div>
               <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Villes sélectionnées ({cities.length})
+                {t('city.ville')} ({cities.length})
               </h3>
               <ul className="flex flex-wrap gap-2">
                 {cities.map((city) => (
@@ -86,7 +88,7 @@ export default function CityForm({ onSubmit, cities }: CityFormProps) {
                 : 'bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
             }`}
           >
-            Valider les villes
+            {t('city.valide')}
           </button>
         </form>
       </div>

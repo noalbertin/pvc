@@ -8,6 +8,7 @@ import { solveTSP } from '@/lib/tsp';
 import About from '@/components/About';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { useTranslation } from 'react-i18next'
 
 
 export default function Home() {
@@ -15,10 +16,7 @@ export default function Home() {
   const [distances, setDistances] = useState<number[][]>([]);
   const [solution, setSolution] = useState<{ path: string[]; distance: number } | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
-
-
-
-
+  const { t } = useTranslation()
 
   const handleCitiesSubmit = (newCities: string[]) => {
     setCities(newCities);
@@ -70,7 +68,7 @@ const getGraphData = () => {
   return { 
     nodes, 
     links: allLinks,
-    shortestPathLinks // Bien retourner cette propriété
+    shortestPathLinks
   };
 };
 
@@ -112,7 +110,7 @@ const getGraphData = () => {
               <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
                 <div className="p-6">
                   <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-6">
-                    Solution Optimale
+                    {t('Title')}
                   </h2>
 
                   <div className="mb-6">

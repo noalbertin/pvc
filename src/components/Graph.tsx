@@ -1,7 +1,9 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useContext } from 'react';
 import * as d3 from 'd3';
+import { useTranslation } from 'react-i18next'
+import { ThemeContext } from '@/context/ThemeContext';
 
 interface Node {
   id: string;
@@ -30,6 +32,8 @@ const Graph: React.FC<GraphProps> = ({ nodes, links, shortestPath }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
   console.log('Graph props:', { nodes, links, shortestPath });
+  const { t } = useTranslation()
+  const { theme } = useContext(ThemeContext);
 
   // Fonction pour mettre à jour les dimensions
   const updateDimensions = () => {
@@ -185,9 +189,9 @@ const Graph: React.FC<GraphProps> = ({ nodes, links, shortestPath }) => {
     nodeGroups.append('circle')
       .attr('r', 20)
       .attr('fill', d => {
-        if (d.id === startNodeId) return '#2196F3'; // Bleu pour le départ
-        if (d.id === endNodeId) return '#F44336';   // Rouge pour l'arrivée
-        return '#4CAF50';                           // Vert pour les autres
+        if (d.id === startNodeId) return '#2196F3'; 
+        if (d.id === endNodeId) return '#F44336';  
+        return '#4CAF50';                           
       })
       .attr('stroke', d => {
         if (d.id === startNodeId) return '#0D47A1';
@@ -204,39 +208,34 @@ const Graph: React.FC<GraphProps> = ({ nodes, links, shortestPath }) => {
       .attr('fill', 'white')
       .attr('font-weight', 'bold');
 
-    nodeGroups.append('title').text(d => `Ville: ${d.name}`);
+    nodeGroups.append('title').text(d => `${t('ville')}: ${d.name}`);
 
-    // === Légende ===
     const legend = svg.append('g').attr('transform', `translate(10, 10)`);
-     // Ajout des couleurs pour départ/arrivée
+
+    const textColor = theme === 'dark' ? '#eee' : '#333';
+    const strokeColor = theme === 'dark' ? '#888' : '#ccc';
+
+
+    // Départ
     legend.append('circle').attr('cx', 0).attr('cy', 10).attr('r', 6).attr('fill', '#2196F3');
-    legend.append('text').attr('x', 12).attr('y', 15).text('Départ').attr('font-size', '12px');
+    legend.append('text').attr('x', 12).attr('y', 15).text(t('legend.depart')).attr('font-size', '12px').attr('fill', textColor);
 
+    // Arrivée
     legend.append('circle').attr('cx', 0).attr('cy', 30).attr('r', 6).attr('fill', '#F44336');
-    legend.append('text').attr('x', 12).attr('y', 35).text('Arrivée').attr('font-size', '12px');
+    legend.append('text').attr('x', 12).attr('y', 35).text(t('legend.arrival')).attr('font-size', '12px').attr('fill', textColor);
 
-    legend.append('line')
-      .attr('x1', 0).attr('y1', 50).attr('x2', 20).attr('y2', 50)
-      .attr('stroke', '#ccc').attr('stroke-width', 1);
+    // Lien possible
+    legend.append('line').attr('x1', 0).attr('y1', 50).attr('x2', 20).attr('y2', 50).attr('stroke', strokeColor).attr('stroke-width', 1);
+    legend.append('text').attr('x', 25).attr('y', 54).text(t('legend.possibleLink')).attr('font-size', '12px').attr('fill', textColor);
 
-    legend.append('text')
-      .attr('x', 25).attr('y', 54)
-      .text('Lien possible')
-      .attr('font-size', '12px')
-      .attr('fill', '#333');
-
+    // Chemin optimal
     legend.append('line')
       .attr('x1', 0).attr('y1', 70).attr('x2', 20).attr('y2', 70)
       .attr('stroke', 'red').attr('stroke-width', 2)
       .attr('stroke-dasharray', '5,5')
-      .attr('marker-end', 'url(#arrow)');  // Ajout du marqueur dans la légende
+      .attr('marker-end', 'url(#arrow)');
 
-    legend.append('text')
-      .attr('x', 25).attr('y', 74)
-      .text('Chemin optimal')
-      .attr('font-size', '12px')
-      .attr('fill', '#333');
-
+    legend.append('text').attr('x', 25).attr('y', 74).text(t('legend.optimalPath')).attr('font-size', '12px').attr('fill', textColor);
     // === Animation ===
     simulation.on('tick', () => {
       // Limiter les positions des nœuds pour qu'ils restent dans les limites du SVG
@@ -283,7 +282,7 @@ const Graph: React.FC<GraphProps> = ({ nodes, links, shortestPath }) => {
 
 
 
-  }, [nodes, links, shortestPath, dimensions]);
+  }, [nodes, links, shortestPath, dimensions, t, theme]);
 
   return (
     <div ref={containerRef} style={{ width: '100%', height: '100%' }}>

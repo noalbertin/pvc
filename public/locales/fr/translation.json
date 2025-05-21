@@ -7,132 +7,40 @@
       "close": "Fermer",
       "task_processing": "Traitement de la tâche {{name}} (valeur: {{value}}, durée: {{duration}}h)"
      
-    }
-    ,
-    "title2": "Optimisation PVA",
-    "subtitle": "Programmation par Points de Valeur Ajoutée (PVA)",
-    "add_task_title": "Ajouter une tâche",
-    "task_name_label": "Nom de la tâche",
-    "task_name_placeholder": "Ex: Tâche A",
-    "duration_label": "Durée (heures)",
-    "duration_placeholder": "Ex: 4",
-    "value_label": "Valeur",
-    "value_placeholder": "Ex: 8",
-    "add_task_button": "Ajouter Tâche",
-    "optimization_settings": "Paramètres d'optimisation",
-    "available_time_label": "Temps disponible (heures)",
-    "optimize_button": "Lancer l'optimisation",
-    "saved_tasks": "Tâches enregistrées",
-    "no_tasks": "Aucune tâche enregistrée",
-    "task_header": "Tâche",
-    "duration_header": "Durée",
-    "value_header": "Valeur",
-    "optimal_solution": "Solution Optimale",
-    "total_value": "Valeur totale",
-    "selected_tasks": "Tâches sélectionnées",
-    "used_time": "Temps utilisé",
-    "retained_tasks": "Tâches retenues",
-    "value": "Valeur",
-    "analysis.detailedAnalysis": "Analyse détaillée",
-    "analysis.tasksAnalyzed": "{{count}} tâches analysées",
-    "analysis.task": "Tâche",
-    "analysis.duration": "Durée",
-    "analysis.value": "Valeur",
-    "analysis.efficiency": "Rendement",
-    "analysis.action": "Action",
-    "analysis.remaining": "Reste",
-    "analysis.added": "Ajouté",
-    "analysis.ignored": "Ignoré",
-    "analysis.summary": "Résumé",
-    "analysis.summary.selectedTasks": "Tâches sélectionnées",
-    "analysis.summary.totalDuration": "Durée totale",
-    "analysis.summary.totalValue": "Valeur totale",
-    "analysis.summary.efficiency": "Efficacité",
-    "analysis.alternative.loss": "-{{loss}} pts",
-    "analysis.alternative.duration": "Durée",
-    "analysis.alternative.value": "Valeur",
-    "analysis.alternative.efficiency": "Rendement",
-    "chart.durationDistribution": "Répartition des durées",
-    "chart.valueDistribution": "Répartition des valeurs",
-    "chart.durationLabel": "Durée (heures)",
-    "chart.valueLabel": "Valeur ajoutée",
-    "analysis.step.efficiencyCalculation": "Calcul des rendements (valeur/heure)",
-    "analysis.step.sortedTasks": "Tri décroissant par rendement",
-    "analysis.step.taskSelection": "Sélection des tâches (capacité: {{capacity}}h)",
-    "analysis.step.alternatives": "Analyse des combinaisons alternatives",
-    "analysis.reason.insufficientCapacity": "Capacité insuffisante ({{remaining}}h restant)",
-    "app_functionality": "Fonctionnement de l'Application",
-    "pva_principle_title": "Principe de la PVA",
-    "pva_principle_text": "La Programmation par Points de Valeur Ajoutée (PVA) optimise l'allocation des ressources en maximisant la valeur générée par unité de temps, selon les principes de la recherche opérationnelle.",
-    "key_features": "Fonctionnalités Clés",
-    "feature_optimization": "Optimisation algorithmique type sac-à-dos",
-    "feature_resource": "Gestion des contraintes temps/ressources",
-    "feature_analysis": "Analyse détaillée étape par étape",
-    "advantages": "Avantages",
-    "advantage_efficiency": "Augmentation de l'efficacité opérationnelle",
-    "advantage_decision": "Aide à la décision stratégique",
-    "advantage_visualization": "Visualisation graphique des résultats",
-    "pdf":"Exporter en PDF",
-    "actualiser":"Actualiser",
-    "aucune_donnée":"Aucune donnée d'analyse disponible",
-    "report": {
-      "title": "Analyse de Valeur Acquise",
-      "task_inventory": "Inventaire des Tâches",
-      "task": "Tâche",
-      "duration": "Durée (h)",
-      "value": "Valeur (pts)",
-      "efficiency": "Rendement (pts/h)",
-      "result": "Résultat",
-      "total_value": "Valeur totale",
-      "task_contribution": "Contribution des tâches à la valeur",
-      "calculation_steps": "Étapes de calcul",
-      "analysis_log": "Journal d'analyse",
-      "generated_on": "Rapport généré le",
-      "capacity": "Capacité: {{hours}}h",
-      "optimization_approach": "Démarche d'Optimisation",
-      "summary": "Synthèse des Résultats",
-      "best_combination": "Combinaison optimale",
-      "time_used": "Temps utilisé",
-      "global_efficiency": "Efficacité globale",
-      "copyright": "NSA - Tous droits réservés",
-      "generated_notice": "Ce document a été généré automatiquement"
     },
-    "table": {
-        "task": "Tâche",
-        "calculation": "Calcul",
-        "result": "Résultat",
-        "unit": "Unité",
-        "duration": "Durée",
-        "value": "Valeur",
-        "efficiency": "Rendement",
-        "action": "Action",
-        "remaining": "Reste"
-      },
-      "selection": {
-        "added": "Ajouté",
-        "ignored": "Ignoré",
-        "selected_tasks": "Tâches sélectionnées",
-        "total_duration": "Durée totale",
-        "total_value": "Valeur totale",
-        "efficiency": "Efficacité"
-      },
-      "alternatives": {
-        "duration": "Durée",
-        "value": "Valeur",
-        "efficiency": "Rendement"
-      },
-      "error": {
-        "insufficientCapacity": "La capacité maximale est insuffisante pour la tâche la plus courte",
-         "unknown": "Une erreur inconnue est survenue"
-      },
-      "solve.taskProcessing": "Traitement de la tâche {{name}} (valeur: {{value}}, durée: {{duration}}h)",
-      "recaptcha": {
-        "required": "Veuillez confirmer que vous n'êtes pas un robot",
-        "failed_verification": "Échec de la vérification anti-robot, Veuillez actualiser.",
-        "suspicious_activity": "Activité suspecte détectée",
-        "render_error": "Erreur de chargement du reCAPTCHA"
-      },
-      "droit": " Tous droits réservés."
+    "droit": " Tous droits réservés.",
+    "Title":"Solution Optimale",
+     "Header": {
+      "title":"Problème du Voyageur de Commerce",
+      "soustitle":"Optimisation de parcours entre villes"
+    },
+    "refresh":"Actualiser",
+    "city": {
+      "title":"Gestion de la ville",
+      "bouton":"Ajouter",
+      "ville":"Villes sélectionnées",
+      "valide":"Valider les villes",
+      "name":"Nom de la ville"
+
+    },
+    "distanceMatrix": {
+      "title":"Matrice des Distances",
+      "calcul":"Calculer le parcours optimal"
+      
+    },
+    "result": {
+      "title":"Parcours optimal",
+      "total":"Distance totale",
+      "unite":"unités"
+      
+    },
+    "ville": "Ville",
+    "legend": {
+      "depart": "Départ",
+      "arrival": "Arrivée",
+      "possibleLink": "Lien possible",
+      "optimalPath": "Chemin optimal"
+    }
 
       
     

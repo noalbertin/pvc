@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next'
 
 interface DistanceMatrixProps {
   cities: string[];
@@ -12,6 +13,7 @@ export default function DistanceMatrix({ cities, distances, onSubmit }: Distance
       ? distances 
       : []
   );
+  const { t } = useTranslation()
 
  useEffect(() => {
     if (cities.length > 0) {
@@ -48,7 +50,7 @@ export default function DistanceMatrix({ cities, distances, onSubmit }: Distance
    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
       <div className="p-6">
         <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4">
-          Matrice des Distances
+           {t('distanceMatrix.title')}
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -99,7 +101,7 @@ export default function DistanceMatrix({ cities, distances, onSubmit }: Distance
             type="submit"
             className="w-full py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors"
           >
-            Calculer le parcours optimal
+            {t('distanceMatrix.calcul')}
           </button>
         </form>
       </div>
