@@ -24,7 +24,6 @@ interface GraphProps {
   nodes: Node[];
   links: Link[];
   shortestPath: string[];
-  shortestPathLinks: Link[]; 
 }
 
 const Graph: React.FC<GraphProps> = ({ nodes, links, shortestPath}) => {

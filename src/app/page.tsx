@@ -121,8 +121,7 @@ const getGraphData = () => {
                       <Graph
                         nodes={nodes}
                         links={links}
-                        shortestPath={solution.path}
-                        shortestPathLinks={shortestPathLinks} 
+                        shortestPath={solution.path} 
                       />
                     </div>
                   </div>
