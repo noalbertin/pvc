@@ -37,6 +37,31 @@
       "arrival": "End",
       "possibleLink": "Possible link",
       "optimalPath": "Optimal path"
+    },
+    "description": "Find the shortest path that visits <strong>{{count}} cities</strong> only once. A classic optimization challenge!",
+    "learn_more": "Learn more",
+    "dialog": {
+      "title": "Traveling Salesman Problem",
+      "intro": "The goal is to find the shortest path visiting a set of cities once before returning to the start.",
+      "features": {
+        "cities": {
+          "title": "Multiple cities",
+          "desc": "Distinct locations to visit"
+        },
+        "optimal": {
+          "title": "Optimal route",
+          "desc": "Minimal total distance"
+        },
+        "complexity": {
+          "title": "NP-hard complexity",
+          "desc": "Exact solution is hard"
+        },
+        "heuristics": {
+          "title": "Heuristic solutions",
+          "desc": "Approximation algorithms"
+        }
+      },
+      "close": "Close"
     }
 
     

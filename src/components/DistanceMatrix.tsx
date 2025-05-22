@@ -47,7 +47,7 @@ export default function DistanceMatrix({ cities, distances, onSubmit }: Distance
   };
 
   return (
-   <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+   <div className="flex-1 bg-gradient-to-br from-sky-100 to-emerald-100 dark:from-sky-800 dark:to-emerald-800  rounded-xl shadow border border-sky-200 dark:border-emerald-700 overflow-hidden">
       <div className="p-6">
         <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4">
            {t('distanceMatrix.title')}

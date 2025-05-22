@@ -13,7 +13,7 @@ export default function CityForm({ onSubmit, cities }: CityFormProps) {
   const handleAddCity = () => {
     if (cityInput.trim() && !cities.includes(cityInput.trim())) {
       const newCities = [...cities, cityInput.trim()];
-      onSubmit(newCities); // Mettez à jour le parent directement
+      onSubmit(newCities); 
       setCityInput('');
     }
   };
@@ -33,7 +33,7 @@ export default function CityForm({ onSubmit, cities }: CityFormProps) {
   };
 
   return (
-   <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div className="flex-1 bg-gradient-to-br from-green-50 to-indigo-50 dark:from-gray-700 dark:to-gray-800 rounded-xl shadow border border-gray-200 dark:border-gray-600 overflow-hidden">
       <div className="p-6">
         <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4">
           {t('city.title')}
@@ -51,10 +51,11 @@ export default function CityForm({ onSubmit, cities }: CityFormProps) {
             <button
               type="button"
               onClick={handleAddCity}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
+              className="w-auto px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
             >
                {t('city.bouton')}
             </button>
+            
           </div>
 
           {cities.length > 0 && (
@@ -79,17 +80,6 @@ export default function CityForm({ onSubmit, cities }: CityFormProps) {
             </div>
           )}
 
-          <button
-            type="submit"
-            disabled={cities.length < 2}
-            className={`w-full py-2 px-4 rounded-lg text-sm font-medium transition-colors ${
-              cities.length >= 2
-                ? 'bg-green-600 hover:bg-green-700 text-white'
-                : 'bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
-            }`}
-          >
-            {t('city.valide')}
-          </button>
         </form>
       </div>
     </div>

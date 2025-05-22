@@ -9,6 +9,8 @@ import About from '@/components/About';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useTranslation } from 'react-i18next'
+import CardExpliquer from '@/components/CardExpliquer';
+import { motion, AnimatePresence } from "framer-motion";
 
 
 export default function Home() {
@@ -84,50 +86,150 @@ const getGraphData = () => {
   setSolution(null);
 };
 
+
+// Animations
+const cardAnimation = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -20 },
+  transition: { duration: 0.3, ease: "easeInOut" }
+};
+
+const containerAnimation = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
+
+const itemAnimation = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.3 } }
+};
   
 
   return (
-   <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <Header onRefresh={handleRefresh} isRefreshing={isRefreshing} />
         
         <main className="py-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div className="space-y-8">
-              <CityForm onSubmit={handleCitiesSubmit} cities={cities} />
+            {/* Colonne gauche */}
+            <motion.div 
+              className="space-y-8"
+              variants={containerAnimation}
+              initial="hidden"
+              animate="show"
+            >
+              <motion.div variants={itemAnimation}>
+                <CityForm onSubmit={handleCitiesSubmit} cities={cities} />
+              </motion.div>
 
-              {cities.length > 0 && (
-                <DistanceMatrix
-                  cities={cities}
-                  distances={distances}
-                  onSubmit={handleDistancesSubmit}
-                />
-              )}
-            </div>
+              <AnimatePresence>
+                {solution && (
+                  <motion.div
+                    variants={itemAnimation}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                  >
+                    <DistanceMatrix
+                      cities={cities}
+                      distances={distances}
+                      onSubmit={handleDistancesSubmit}
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
-            {solution && (
-              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
-                <div className="p-6">
-                  <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-6">
-                    {t('Title')}
-                  </h2>
+              <AnimatePresence>
+                {cities.length > 0 && (
+                  <motion.div
+                    variants={itemAnimation}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                  >
+                    <CardExpliquer />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
 
-                  <div className="mb-6">
-                    <Result solution={solution} />
-                  </div>
+            {/* Colonne droite */}
+            <motion.div 
+              className="space-y-8"
+              variants={containerAnimation}
+              initial="hidden"
+              animate="show"
+            >
+              <AnimatePresence mode="wait">
+                {cities.length === 0 ? (
+                  <motion.div
+                    key="empty-state"
+                    {...cardAnimation}
+                    className="h-full flex items-center justify-center"
+                  >
+                    <CardExpliquer />
+                  </motion.div>
+                ) : !solution ? (
+                  <motion.div
+                    key="distance-matrix"
+                    {...cardAnimation}
+                  >
+                    <DistanceMatrix
+                      cities={cities}
+                      distances={distances}
+                      onSubmit={handleDistancesSubmit}
+                    />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="solution"
+                    {...cardAnimation}
+                    className="flex-1 bg-gradient-to-br from-teal-50 to-cyan-50 dark:from-[#0c343d] dark:via-cyan-900/40 dark:to-[#082f49] dark:border-cyan-800/60 rounded-xl shadow border border-cyan-100 dark:border-gray-600 overflow-hidden" >
+                    <div className="p-6">
+                      <motion.h2 
+                        className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-6"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.2 }}
+                      >
+                        {t('Title')}
+                      </motion.h2>
 
-                  <div className="relative h-[500px] rounded-lg bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700">
-                    <div className="absolute inset-0 p-4">
-                      <Graph
-                        nodes={nodes}
-                        links={links}
-                        shortestPath={solution.path} 
-                      />
+                      <motion.div 
+                        className="mb-6"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.3 }}
+                      >
+                        <Result solution={solution} />
+                      </motion.div>
+
+                      <motion.div 
+                        className="relative h-[500px] rounded-lg bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700"
+                        initial={{ opacity: 0, scale: 0.98 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.4 }}
+                      >
+                        <div className="absolute inset-0 p-4">
+                          <Graph
+                            nodes={nodes}
+                            links={links}
+                            shortestPath={solution.path} 
+                          />
+                        </div>
+                      </motion.div>
                     </div>
-                  </div>
-                </div>
-              </div>
-            )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
           </div>
         </main>
 

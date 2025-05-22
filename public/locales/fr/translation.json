@@ -40,6 +40,30 @@
       "arrival": "Arrivée",
       "possibleLink": "Lien possible",
       "optimalPath": "Chemin optimal"
+    },
+    "description": "Trouver le chemin le plus court visitant <strong>{{count}} villes</strong> une seule fois. Un classique de l’optimisation !",
+    "learn_more": "En savoir plus",
+    "dialog": {
+      "intro": "Le but est de trouver le chemin le plus court possible visitant un ensemble de villes une seule fois avant de revenir à la ville de départ.",
+      "features": {
+        "cities": {
+          "title": "Villes multiples",
+          "desc": "Localisations distinctes à visiter"
+        },
+        "optimal": {
+          "title": "Route optimale",
+          "desc": "Distance totale minimale"
+        },
+        "complexity": {
+          "title": "Complexité NP-dur",
+          "desc": "Solution exacte difficile"
+        },
+        "heuristics": {
+          "title": "Solutions heuristiques",
+          "desc": "Algorithmes approximatifs"
+        }
+      },
+      "close": "Fermer"
     }
 
       
