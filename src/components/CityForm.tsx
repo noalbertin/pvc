@@ -40,7 +40,7 @@ export default function CityForm({ onSubmit, cities }: CityFormProps) {
         </h2>
         
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="flex gap-2">
+          <div className="flex flex-col md:flex-row gap-2">
             <input
               type="text"
               value={cityInput}

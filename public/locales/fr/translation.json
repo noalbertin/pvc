@@ -12,7 +12,8 @@
     "Title":"Solution Optimale",
      "Header": {
       "title":"Problème du Voyageur de Commerce",
-      "soustitle":"Optimisation de parcours entre villes"
+      "soustitle":"Optimisation de parcours entre villes",
+       "generatePdf": "Générer le rapport PDF"
     },
     "refresh":"Actualiser",
     "city": {
@@ -64,6 +65,15 @@
         }
       },
       "close": "Fermer"
+    },
+    "pdf": {
+      "title": "Rapport d'Optimisation",
+      "path": "Chemin optimal",
+      "total": "Distance totale",
+      "graph": "Représentation graphique",
+      "generating": "Génération en cours...",
+      "download": "Télécharger PDF",
+      "matrix":"Listes des Villes"
     }
 
       

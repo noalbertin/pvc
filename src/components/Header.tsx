@@ -2,14 +2,19 @@ import React from 'react';
 import LanguageSwitcher from './LanguageSwitcher';
 import ThemeToggle from './ThemeToggle';
 import { FiRefreshCw } from 'react-icons/fi';
+import { TbFileTypePdf } from "react-icons/tb";
 import { useTranslation } from 'react-i18next'
 
 interface HeaderProps {
   onRefresh: () => void;
   isRefreshing?: boolean;
+  onGeneratePdf: () => void;
+  solution: { path: string[]; distance: number } | null;
 }
 
-export default function Header({ onRefresh, isRefreshing }: HeaderProps) {
+
+export default function Header({ onRefresh, isRefreshing, onGeneratePdf, solution }: HeaderProps) {
+
   const { t } = useTranslation()
   return (
     <div className="sticky top-0 z-10 backdrop-blur-md border-b border-gray-200 dark:border-slate-600">
@@ -29,6 +34,18 @@ export default function Header({ onRefresh, isRefreshing }: HeaderProps) {
 
           {/* Autres contrôles */}
           <div className="flex items-center gap-2">
+            {solution && (
+              <button
+                onClick={onGeneratePdf}
+                className="p-2 rounded-full bg-gray-200 text-center dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                title={t('Header.generatePdf')}
+                aria-label="Generate PDF"
+              >
+                <TbFileTypePdf className="h-5 w-5 text-red-500 dark:text-red-400" />
+              </button>
+            )}
+
+            
             <button
                 onClick={onRefresh}
                 className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 transition-colors text-gray-700"

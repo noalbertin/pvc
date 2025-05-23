@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import CityForm from '../components/CityForm';
 import DistanceMatrix from '../components/DistanceMatrix';
 import Result from '../components/Result';
@@ -11,6 +11,11 @@ import Footer from '@/components/Footer';
 import { useTranslation } from 'react-i18next'
 import CardExpliquer from '@/components/CardExpliquer';
 import { motion, AnimatePresence } from "framer-motion";
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import { PdfDocument } from '@/components/PdfReport';
+import { pdf } from '@react-pdf/renderer';
+import { saveAs } from 'file-saver'; 
+import { toPng } from 'html-to-image';
 
 
 export default function Home() {
@@ -19,6 +24,8 @@ export default function Home() {
   const [solution, setSolution] = useState<{ path: string[]; distance: number } | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const { t } = useTranslation()
+  const [graphImage, setGraphImage] = useState<string>('');
+
 
   const handleCitiesSubmit = (newCities: string[]) => {
     setCities(newCities);
@@ -109,13 +116,50 @@ const itemAnimation = {
   hidden: { opacity: 0, y: 20 },
   show: { opacity: 1, y: 0, transition: { duration: 0.3 } }
 };
-  
+const graphRef = useRef<HTMLDivElement>(null);
+
+const handleGeneratePdf = async () => {
+  try {
+    if (!solution) {
+      console.error("Solution is null, cannot generate PDF.");
+      return;
+    }
+
+    if (graphRef.current) {
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      const dataUrl = await toPng(graphRef.current, {
+        quality: 1,
+        cacheBust: true,
+      });
+
+      setGraphImage(dataUrl);
+
+      const blob = await pdf(
+        <PdfDocument 
+          solution={solution} 
+          graphImage={dataUrl} 
+          matrix={distances}
+        />
+      ).toBlob();
+
+      saveAs(blob, 'resultat.pdf');
+    }
+  } catch (error) {
+    console.error('Erreur lors de la génération du PDF:', error);
+  }
+};
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <Header onRefresh={handleRefresh} isRefreshing={isRefreshing} />
-        
+        <Header 
+          onRefresh={handleRefresh} 
+          isRefreshing={isRefreshing} 
+          onGeneratePdf={handleGeneratePdf} 
+          solution={solution}
+        />
+
         <main className="py-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Colonne gauche */}
@@ -217,11 +261,12 @@ const itemAnimation = {
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.4 }}
                       >
-                        <div className="absolute inset-0 p-4">
+                        <div className="absolute inset-0 p-4" ref={graphRef}>
                           <Graph
                             nodes={nodes}
                             links={links}
                             shortestPath={solution.path} 
+                            
                           />
                         </div>
                       </motion.div>

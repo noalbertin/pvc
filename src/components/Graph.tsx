@@ -231,11 +231,8 @@ const Graph: React.FC<GraphProps> = ({ nodes, links, shortestPath}) => {
     const textColor = theme === 'dark' ? '#eee' : '#333';
     const strokeColor = theme === 'dark' ? '#888' : '#ccc';
 
-    legend.append('circle').attr('cx', 0).attr('cy', 10).attr('r', 6).attr('fill', '#2196F3');
-    legend.append('text').attr('x', 12).attr('y', 15).text(t('legend.depart')).attr('font-size', '12px').attr('fill', textColor);
-
-    legend.append('circle').attr('cx', 0).attr('cy', 30).attr('r', 6).attr('fill', '#F44336');
-    legend.append('text').attr('x', 12).attr('y', 35).text(t('legend.arrival')).attr('font-size', '12px').attr('fill', textColor);
+    legend.append('circle').attr('cx', 0).attr('cy', 30).attr('r', 6).attr('fill', '#2196F3');
+    legend.append('text').attr('x', 12).attr('y', 35).text(t('legend.depart')).attr('font-size', '12px').attr('fill', textColor);
 
     legend.append('line').attr('x1', 0).attr('y1', 50).attr('x2', 20).attr('y2', 50).attr('stroke', strokeColor).attr('stroke-width', 1);
     legend.append('text').attr('x', 25).attr('y', 54).text(t('legend.possibleLink')).attr('font-size', '12px').attr('fill', textColor);
@@ -295,7 +292,7 @@ const Graph: React.FC<GraphProps> = ({ nodes, links, shortestPath}) => {
 
   return (
     <div ref={containerRef} style={{ width: '100%', height: '100%' }}>
-      <svg ref={svgRef} style={{ display: 'block', margin: '0 auto' }} />
+      <svg id="graph-svg" ref={svgRef} style={{ display: 'block', margin: '0 auto' }} />
     </div>
   );
 };

@@ -12,7 +12,8 @@
     "Title":"Optimal Solution",
     "Header": {
       "title":"Traveling Salesman Problem",
-      "soustitle":"Route optimization between cities"
+      "soustitle":"Route optimization between cities",
+      "generatePdf": "Generate PDF report"
     },
     "refresh":"Refresh",
     "city": {
@@ -62,7 +63,16 @@
         }
       },
       "close": "Close"
-    }
+    },
+    "pdf": {
+    "title": "Optimization Report",
+    "path": "Optimal Path",
+    "total": "Total Distance",
+    "graph": "Graph Representation",
+    "generating": "Generating...",
+    "download": "Download PDF",
+    "matrix":"List of Cities" 
+  }
 
     
 
