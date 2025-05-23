@@ -11,7 +11,6 @@ import Footer from '@/components/Footer';
 import { useTranslation } from 'react-i18next'
 import CardExpliquer from '@/components/CardExpliquer';
 import { motion, AnimatePresence } from "framer-motion";
-import { PDFDownloadLink } from '@react-pdf/renderer';
 import { PdfDocument } from '@/components/PdfReport';
 import { pdf } from '@react-pdf/renderer';
 import { saveAs } from 'file-saver'; 
@@ -24,7 +23,6 @@ export default function Home() {
   const [solution, setSolution] = useState<{ path: string[]; distance: number } | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const { t } = useTranslation()
-  const [graphImage, setGraphImage] = useState<string>('');
 
 
   const handleCitiesSubmit = (newCities: string[]) => {
@@ -132,8 +130,6 @@ const handleGeneratePdf = async () => {
         quality: 1,
         cacheBust: true,
       });
-
-      setGraphImage(dataUrl);
 
       const blob = await pdf(
         <PdfDocument 

@@ -408,9 +408,9 @@ export const PdfDocument: React.FC<PdfDocumentProps> = ({ solution, graphImage, 
                 
                 <View style={styles.legendItem}>
                   <View style={[styles.legendLine, { 
-                    backgroundColor: COLORS.primary,
+                    backgroundColor: COLORS.danger,
                     borderBottomWidth: 2,
-                    borderBottomColor: COLORS.primary,
+                    borderBottomColor: COLORS.danger,
                     borderBottomStyle: 'solid'
                   }]} />
                   <Text>{t('legend.optimalPath')}</Text>
