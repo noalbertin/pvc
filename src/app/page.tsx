@@ -15,16 +15,12 @@ import { PdfDocument } from '@/components/PdfReport';
 import { pdf } from '@react-pdf/renderer';
 import { saveAs } from 'file-saver'; 
 import { toPng } from 'html-to-image';
-
-
 export default function Home() {
   const [cities, setCities] = useState<string[]>([]);
   const [distances, setDistances] = useState<number[][]>([]);
   const [solution, setSolution] = useState<{ path: string[]; distance: number } | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const { t } = useTranslation()
-
-
   const handleCitiesSubmit = (newCities: string[]) => {
     setCities(newCities);
     // Initialize distance matrix with zeros
@@ -90,8 +86,6 @@ const getGraphData = () => {
   }, 1000);
   setSolution(null);
 };
-
-
 // Animations
 const cardAnimation = {
   initial: { opacity: 0, y: 20 },
