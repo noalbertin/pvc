@@ -3,10 +3,17 @@ import { useTranslation } from 'react-i18next'
 
 interface CityFormProps {
   onSubmit: (cities: string[]) => void;
-  cities: string[]; 
+  cities: string[];
+  onSelectStart: (city: string) => void; // Nouvelle prop
+  selectedStart: string; // Nouvelle prop
 }
 
-export default function CityForm({ onSubmit, cities }: CityFormProps) {
+export default function CityForm({ onSubmit, 
+  cities, 
+  onSelectStart,
+  selectedStart  
+}: CityFormProps) 
+{
   const [cityInput, setCityInput] = useState('');
   const { t } = useTranslation()
 
@@ -60,25 +67,49 @@ export default function CityForm({ onSubmit, cities }: CityFormProps) {
 
           {cities.length > 0 && (
             <div>
-              <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                {t('city.ville')} ({cities.length})
-              </h3>
-              <ul className="flex flex-wrap gap-2">
-                {cities.map((city) => (
-                  <li key={city} className="inline-flex items-center bg-blue-50/50 dark:bg-blue-900/30 border border-blue-100 dark:border-blue-800 px-3 py-1 rounded-lg text-sm">
-                    <span className="text-blue-700 dark:text-blue-300">{city}</span>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveCity(city)}
-                      className="ml-2 text-blue-500 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-200"
-                    >
-                      ×
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              {t('city.ville')} ({cities.length})
+            </h3>
+            <ul className="flex flex-wrap gap-2">
+              {cities.map((city) => (
+                <li 
+                  key={city} 
+                  className={
+                    `inline-flex items-center border px-3 py-1 rounded-lg text-sm cursor-pointer
+                    ${city === selectedStart 
+                      ? 'bg-green-100 dark:bg-green-900/30 border-green-300 dark:border-green-700 text-green-700 dark:text-green-300'
+                      : 'bg-blue-50/50 dark:bg-blue-900/30 border-blue-100 dark:border-blue-800 text-blue-700 dark:text-blue-300'
+                    }`
+                  }
+                  onClick={() => onSelectStart(city)}
+                >
+                  <span>{city}</span>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRemoveCity(city);
+                    }}
+                    className="ml-2 hover:text-red-500"
+                  >
+                    ×
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+
           )}
+          {cities.length > 0 && (
+            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+              {t('city.start')}: <span className="font-medium text-green-600 dark:text-green-400">
+                {selectedStart}
+              </span>
+            </p>
+          )}
+
+
+          
 
         </form>
       </div>

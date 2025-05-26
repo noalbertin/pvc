@@ -100,10 +100,10 @@ const Graph: React.FC<GraphProps> = ({ nodes, links, shortestPath}) => {
     defs.append('marker')
       .attr('id', 'legend-arrow')
       .attr('viewBox', '0 -5 10 10')
-      .attr('refX', 10)
+      .attr('refX', 22)
       .attr('refY', 0)
-      .attr('markerWidth', 8)
-      .attr('markerHeight', 8)
+      .attr('markerWidth', 10)
+      .attr('markerHeight', 10)
       .attr('orient', 'auto')
       .append('path')
         .attr('d', 'M0,-5L10,0L0,5')
@@ -134,6 +134,7 @@ const Graph: React.FC<GraphProps> = ({ nodes, links, shortestPath}) => {
       const src = getId(source);
       const tgt = getId(target);
       
+      // Vérifie toutes les connexions directes dans l'ordre du chemin optimal
       for (let i = 0; i < shortestPath.length - 1; i++) {
         if (shortestPath[i] === src && shortestPath[i+1] === tgt) {
           return true;
@@ -143,16 +144,19 @@ const Graph: React.FC<GraphProps> = ({ nodes, links, shortestPath}) => {
     };
 
     const link = svg.append('g')
-      .attr('class', 'links')
-      .selectAll('line')
-      .data(links)
-      .enter()
-      .append('line')
-      .attr('stroke', d => isInShortestPath(d.source, d.target) ? 'red' : '#ccc')
-      .attr('stroke-width', d => isInShortestPath(d.source, d.target) ? 2 : 1)
-      .attr('stroke-dasharray', d => isInShortestPath(d.source, d.target) ? '5,5' : '0')
-      .attr('marker-end', d => isDirectedShortestPath(d.source, d.target) ? 'url(#arrow)' : 'none');
+    .attr('class', 'links')
+    .selectAll('line')
+    .data(links)
+    .enter()
+    .append('line')
+    .attr('stroke', d => isInShortestPath(d.source, d.target) ? 'red' : '#ccc')
+    .attr('stroke-width', d => isInShortestPath(d.source, d.target) ? 2 : 1)
+    .attr('stroke-dasharray', d => isInShortestPath(d.source, d.target) ? '5,5' : '0')
+    .attr('marker-end', d => isDirectedShortestPath(d.source, d.target) ? 'url(#arrow)' : 'none');
 
+    // Ajouter ceci pour forcer le rendu des flèches
+    link.filter(d => isDirectedShortestPath(d.source, d.target))
+    .attr('marker-end', 'url(#arrow)');
     link.append('title').text(d => `Distance: ${d.distance}`);
 
     svg.selectAll('.distance-label-bg')

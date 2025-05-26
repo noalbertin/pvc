@@ -21,7 +21,8 @@
       "bouton":"Add",
       "ville":"Selected cities",
       "valide":"Validate cities",
-      "name":"City name"
+      "name":"City name",
+      "start": "Starting city"
     },
     "distanceMatrix": {
       "title":"Distance Matrix",
@@ -39,7 +40,7 @@
       "possibleLink": "Possible link",
       "optimalPath": "Optimal path"
     },
-    "description": "Find the shortest path that visits <strong>{{count}} cities</strong> only once. A classic optimization challenge!",
+    "description": "Find the shortest path that visits <strong>several cities</strong> only once. A classic optimization challenge!",
     "learn_more": "Learn more",
     "dialog": {
       "title": "Traveling Salesman Problem",

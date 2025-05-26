@@ -21,7 +21,8 @@
       "bouton":"Ajouter",
       "ville":"Villes sélectionnées",
       "valide":"Valider les villes",
-      "name":"Nom de la ville"
+      "name":"Nom de la ville",
+      "start": "Ville de départ"
 
     },
     "distanceMatrix": {
@@ -42,7 +43,7 @@
       "possibleLink": "Lien possible",
       "optimalPath": "Chemin optimal"
     },
-    "description": "Trouver le chemin le plus court visitant <strong>{{count}} villes</strong> une seule fois. Un classique de l’optimisation !",
+    "description": "Trouver le chemin le plus court visitant <strong>plusieur villes</strong> une seule fois. Un classique de l’optimisation !",
     "learn_more": "En savoir plus",
     "dialog": {
       "intro": "Le but est de trouver le chemin le plus court possible visitant un ensemble de villes une seule fois avant de revenir à la ville de départ.",

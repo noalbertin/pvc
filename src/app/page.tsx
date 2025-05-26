@@ -20,23 +20,25 @@ export default function Home() {
   const [distances, setDistances] = useState<number[][]>([]);
   const [solution, setSolution] = useState<{ path: string[]; distance: number } | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [selectedStartCity, setSelectedStartCity] = useState<string>('');
   const { t } = useTranslation()
-  const handleCitiesSubmit = (newCities: string[]) => {
-    setCities(newCities);
-    // Initialize distance matrix with zeros
-    setDistances(new Array(newCities.length).fill(0).map(() => new Array(newCities.length).fill(0)));
-    setSolution(null);
-  };
 
   const handleDistancesSubmit = (newDistances: number[][]) => {
-    setDistances(newDistances);
-    // Calculate solution
-    const solution = solveTSP(cities, newDistances);
-    setSolution(solution);
-  };
+  setDistances(newDistances);
+  const startIndex = cities.indexOf(selectedStartCity);
+  const solution = solveTSP(cities, newDistances, startIndex);
+  setSolution(solution);
+};
+
+const handleCitiesSubmit = (newCities: string[]) => {
+  setCities(newCities);
+  setSelectedStartCity(newCities[0]); // Définir la première ville par défaut
+  setDistances(new Array(newCities.length).fill(0).map(() => new Array(newCities.length).fill(0)));
+  setSolution(null);
+};
 
 const getGraphData = () => {
-  if (!cities.length || !solution) return { nodes: [], links: [], shortestPathLinks: [] };
+  if (!cities.length || !solution) return { nodes: [], links: [], shortesLLtPathLinks: [] };
 
   const nodes = cities.map((city) => ({
     id: city,
@@ -160,7 +162,11 @@ const handleGeneratePdf = async () => {
               animate="show"
             >
               <motion.div variants={itemAnimation}>
-                <CityForm onSubmit={handleCitiesSubmit} cities={cities} />
+                <CityForm onSubmit={handleCitiesSubmit} 
+                  cities={cities}
+                  onSelectStart={setSelectedStartCity}
+                  selectedStart={selectedStartCity} 
+                />
               </motion.div>
 
               <AnimatePresence>

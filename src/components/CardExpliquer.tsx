@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Dialog } from "@headlessui/react";
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next';
 
 export default function CardExpliquer() {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,6 +25,28 @@ export default function CardExpliquer() {
     },
   ];
 
+  // Animation variants
+  const backdropVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { duration: 0.3 } }
+  };
+
+  const dialogVariants = {
+    hidden: { opacity: 0, y: 20, scale: 0.95 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      scale: 1,
+      transition: { 
+        type: "spring",
+        damping: 25,
+        stiffness: 500,
+        duration: 0.5
+      }
+    },
+    exit: { opacity: 0, y: 20, scale: 0.95 }
+  };
+
   return (
     <>
       <motion.div
@@ -36,12 +58,15 @@ export default function CardExpliquer() {
         <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-2">
           {t('Header.title')}
         </h2>
-        <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
-          {t('description')}
-        </p>
+        <p
+          className="text-sm text-gray-600 dark:text-gray-300 mb-4"
+          dangerouslySetInnerHTML={{ __html: t('description') }}
+        />
+
         
         <motion.div 
           whileHover={{ x: 5 }}
+          whileTap={{ scale: 0.98 }}
           onClick={() => setIsOpen(true)}
           className="flex items-center gap-2 text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 cursor-pointer"
         >
@@ -50,45 +75,94 @@ export default function CardExpliquer() {
             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 6l6 6-6 6"/>
           </svg>
         </motion.div>
-        
       </motion.div>
 
-      <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="relative z-50">
-        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm" aria-hidden="true" />
-        <div className="fixed inset-0 flex items-center justify-center p-4">
-          <Dialog.Panel className="max-w-3xl w-full bg-white dark:bg-gray-900 p-6 rounded-xl shadow-lg overflow-y-auto max-h-[90vh]">
-            <Dialog.Title className="text-xl font-bold text-gray-800 dark:text-white mb-4">
-              {t('Header.title')}
-            </Dialog.Title>
-            <p className="text-gray-700 dark:text-gray-300 mb-6">
-             {t('dialog.intro')}
-            </p>
-            {/* Reutilisation du contenu de Tspcard */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {icons.map((item, idx) => (
-                <div key={idx} className="flex items-start gap-3 bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
-                  <svg className="w-6 h-6 text-purple-600 dark:text-purple-400 mt-1" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d={item.icon} />
-                  </svg>
-                  <div>
-                    <h3 className="font-semibold text-gray-800 dark:text-gray-100">
-                      {t(`dialog.features.${item.key}.title`)}
-                    </h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      {t(`dialog.features.${item.key}.desc`)}
-                    </p>
-                  </div>
+      <AnimatePresence>
+        {isOpen && (
+          <Dialog 
+            static 
+            open={isOpen} 
+            onClose={() => setIsOpen(false)} 
+            className="relative z-50"
+          >
+            {/* Backdrop with animation */}
+            <motion.div
+              variants={backdropVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              className="fixed inset-0 bg-black/30 backdrop-blur-sm"
+              aria-hidden="true"
+            />
+            
+            <div className="fixed inset-0 flex items-center justify-center p-4">
+              <Dialog.Panel 
+                as={motion.div}
+                variants={dialogVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                className="max-w-3xl w-full bg-white dark:bg-gray-900 p-6 rounded-xl shadow-lg overflow-y-auto max-h-[90vh]"
+              >
+                <Dialog.Title className="text-xl font-bold text-gray-800 dark:text-white mb-4">
+                  {t('Header.title')}
+                </Dialog.Title>
+                <p className="text-gray-700 dark:text-gray-300 mb-6">
+                  {t('dialog.intro')}
+                </p>
+                
+                {/* Content with staggered animations */}
+                <motion.div 
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+                  initial="hidden"
+                  animate="visible"
+                  variants={{
+                    visible: {
+                      transition: {
+                        staggerChildren: 0.1
+                      }
+                    }
+                  }}
+                >
+                  {icons.map((item, idx) => (
+                    <motion.div 
+                      key={idx}
+                      variants={{
+                        hidden: { opacity: 0, y: 10 },
+                        visible: { opacity: 1, y: 0 }
+                      }}
+                      className="flex items-start gap-3 bg-gray-50 dark:bg-gray-800 p-3 rounded-lg"
+                    >
+                      <svg className="w-6 h-6 text-purple-600 dark:text-purple-400 mt-1" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d={item.icon} />
+                      </svg>
+                      <div>
+                        <h3 className="font-semibold text-gray-800 dark:text-gray-100">
+                          {t(`dialog.features.${item.key}.title`)}
+                        </h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          {t(`dialog.features.${item.key}.desc`)}
+                        </p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </motion.div>
+                
+                <div className="mt-6 text-right">
+                  <motion.button 
+                    onClick={() => setIsOpen(false)}
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="px-4 py-2 text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
+                  >
+                    {t('dialog.close')}
+                  </motion.button>
                 </div>
-              ))}
+              </Dialog.Panel>
             </div>
-            <div className="mt-6 text-right">
-              <button onClick={() => setIsOpen(false)} className="px-4 py-2 text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
-                 {t('dialog.close')}
-              </button>
-            </div>
-          </Dialog.Panel>
-        </div>
-      </Dialog>
+          </Dialog>
+        )}
+      </AnimatePresence>
     </>
   );
 }
