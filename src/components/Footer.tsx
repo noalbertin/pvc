@@ -21,7 +21,7 @@ export default function Footer() {
 
         {/* Texte */}
         <p className="text-sm font-medium">
-          &copy; {new Date().getFullYear()} {' '}
+          &copy; {new Date().getFullYear()} Nirindrainy Sylvano Albertin.{' '}
           <Trans i18nKey="droit" />
         </p>
 
