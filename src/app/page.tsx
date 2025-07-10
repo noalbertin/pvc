@@ -274,7 +274,7 @@ const handleGeneratePdf = async () => {
           </div>
         </main>
 
-        <About />
+        {/* <About /> */}
         <Footer />
       </div>
     </div>

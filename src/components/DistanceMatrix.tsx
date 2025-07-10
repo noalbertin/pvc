@@ -8,7 +8,7 @@ interface DistanceMatrixProps {
 }
 
 export default function DistanceMatrix({ cities, distances, onSubmit }: DistanceMatrixProps) {
-  const [matrix, setMatrix] = useState<number[][]>(() => 
+  const [matrix, setMatrix] = useState<(number | "")[][]>(() => 
     cities.length > 0 
       ? distances 
       : []
@@ -17,10 +17,14 @@ export default function DistanceMatrix({ cities, distances, onSubmit }: Distance
 
  useEffect(() => {
     if (cities.length > 0) {
-      const newMatrix = Array(cities.length).fill(0)
+      const newMatrix = Array(cities.length).fill(null)
         .map((_, i) => 
-          Array(cities.length).fill(0)
-            .map((_, j) => distances[i]?.[j] || 0)
+          Array(cities.length).fill(null)
+            .map((_, j) => {
+              const val = distances[i]?.[j];
+              return val === Infinity ? "" : val ?? "";
+            })
+
         );
       setMatrix(newMatrix);
     } else {
@@ -30,21 +34,29 @@ export default function DistanceMatrix({ cities, distances, onSubmit }: Distance
 
    const handleDistanceChange = (row: number, col: number, value: string) => {
     const newMatrix = matrix.map(row => [...row]); // Copie profonde
-    const numValue = Math.max(0, parseInt(value) || 0);
-    
-    newMatrix[row][col] = numValue;
-    
-    if (row !== col) {
-      newMatrix[col][row] = numValue;
-    }
-    
+    const parsedValue = value === '' ? '' : Math.max(0, parseInt(value));
+
+
+    newMatrix[row][col] = parsedValue;
     setMatrix(newMatrix);
   };
 
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(matrix);
+
+    const cleanMatrix = matrix.map((row, i) =>
+      row.map((cell, j) => {
+        if (i === j) return 0; // distance à soi-même
+        if (cell === "" || cell === 0) return Infinity; // pas de route
+        return cell;
+      })
+    );
+
+    onSubmit(cleanMatrix);
   };
+
+
 
   return (
    <div className="flex-1 bg-gradient-to-br from-sky-100 to-emerald-100 dark:from-sky-800 dark:to-emerald-800  rounded-xl shadow border border-sky-200 dark:border-emerald-700 overflow-hidden">
@@ -79,8 +91,7 @@ export default function DistanceMatrix({ cities, distances, onSubmit }: Distance
                       <td key={col} className="px-4 py-3 whitespace-nowrap">
                         <input
                           type="number"
-                          min="0"
-                          value={matrix[row]?.[col] ?? 0}
+                          value={matrix[row]?.[col] === Infinity ? '' : matrix[row]?.[col] ?? ''}
                           onChange={(e) => handleDistanceChange(row, col, e.target.value)}
                           className={`w-16 px-2 py-1 text-sm border rounded text-center focus:ring-1 focus:outline-none ${
                             row === col
